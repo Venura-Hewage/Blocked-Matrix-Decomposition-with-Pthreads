@@ -42,12 +42,9 @@ void randomMatrix(int **array, int size)
     }
 }
 
-//External Code Citation [1]
-//Title: Parallel Matrix Multiplication in Pthreads
-///Availability:http://multicoredays.blogspot.com/2014/05/parallel-matrix-multiplication-in.html
-// Author:Joyrider
 
-void *multiplyVector(void *arguments)
+//////////////////////////////////////////////////////////////////////////////////////////////////
+void *multiplyMatrix(void *arguments)
 {
 
 struct thread_data *args;
@@ -56,8 +53,7 @@ args=(struct thread_data *) arguments;
 
 double sum;
 int i, j, k, kk, jj;
-int prt = 100;
-int bsize = (size/prt);
+int bsize = size / num_of_pieces;
 int diff = (args->id)+ 1;
 int sm = bsize*diff;
 int start = sm -bsize;
@@ -145,7 +141,7 @@ for(int i=0;i<num_of_pieces;i++)
     for(int i=0;i<num_of_pieces;i++)
     {
         //cout << "main() : creating thread, " << i << endl;
-         rc =pthread_create(&threads[i], NULL, *multiplyVector,(void *)&td[i]);     
+         rc =pthread_create(&threads[i], NULL, *multiplyMatrix,(void *)&td[i]);     
         if(rc){
             cout << "Error:unable to create thread," << rc << endl;
             exit(-1);
@@ -163,10 +159,15 @@ for(int i=0;i<num_of_pieces;i++)
     cout << "Time taken by function: "
          << duration.count() << " microseconds" << endl;
     
+ 
+
+
+ 
+
 
     return 0;
 
-
+ 
 
 
 
